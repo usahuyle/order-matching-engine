@@ -75,7 +75,6 @@ void OrderBook::modifyOrder(std::string orderId, Order::OrderOperation modifyOrd
             break;
         }
     }
-    // display();
 };
 
 void OrderBook::printOrders(){
