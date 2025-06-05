@@ -17,9 +17,11 @@ void OrderBook::addSellOrder(const Order &sellOrder) {
 }
 
 void OrderBook::matchOrders()  {
-		while(!buyOrders.empty() && !sellOrders.empty()){
-			Order &buyOrder = buyOrders.front();
-			Order &sellOrder = sellOrders.front();
+        auto buyIT = buyOrders.begin();
+        auto sellIT = sellOrders.begin();
+        while(buyIT!= buyOrders.end() && sellIT != sellOrders.end()){
+			Order &buyOrder = *buyIT;
+			Order &sellOrder = *sellIT;
             idNumOfBuyOrder = stoi(buyOrder.getId().substr(sizeOfOrderWord,sizeOfOrderWord-buyOrder.getId().size()));
             idNumOfSellOrder= stoi(sellOrder.getId().substr(sizeOfOrderWord,sizeOfOrderWord-sellOrder.getId().size()));
 			if (buyOrder.getPrice() >= sellOrder.getPrice()){
@@ -30,20 +32,26 @@ void OrderBook::matchOrders()  {
                 }else{
                     std::cout << sellOrder << buyOrder<<std::endl;
                 }
-                adjustOrderQuantity(buyOrder, buyOrders, matchedQuantity);
-                adjustOrderQuantity(sellOrder, sellOrders, matchedQuantity);
-			} else{
-                break;
+                bool fullMatchBuyOrder = adjustOrderQuantity(buyOrder, buyOrders, matchedQuantity);
+                bool fullMatchSellOrder= adjustOrderQuantity(sellOrder, sellOrders, matchedQuantity);
+                if (fullMatchBuyOrder) {
+                    buyIT = buyOrders.erase(buyIT);
+                }
+                if (fullMatchSellOrder) {
+                    sellIT = sellOrders.erase(sellIT); 
+                }
+			}else{
+                buyIT++;
             }
         }
 };
 
-void OrderBook::adjustOrderQuantity(Order &order, std::deque<Order> &ordersDeque, const int matchedQuantity){
+bool OrderBook::adjustOrderQuantity(Order &order, std::deque<Order> &ordersDeque, const int matchedQuantity){
     if(order.getQuantity() > matchedQuantity){
         order.setQuantity((order.getQuantity()-matchedQuantity));
-    }else{
-        ordersDeque.pop_front();
+        return false;
     }
+    return true;
 
 };
 

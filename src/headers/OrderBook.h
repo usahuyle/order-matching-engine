@@ -18,7 +18,7 @@ class OrderBook: public I_OrderBook{
         void addSellOrder(const Order &sellOrders) override;
         void modifyOrder(std::string orderId, Order::OrderOperation orderOperation, int newPrice, int newQuantity) override;
         void matchOrders() override;
-        void adjustOrderQuantity(Order &order,std::deque<Order> &ordersDeque,const int matchedQuantity);
+        bool adjustOrderQuantity(Order &order,std::deque<Order> &ordersDeque,const int matchedQuantity);
         void printOrders() override;
     
 };

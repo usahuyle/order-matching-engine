@@ -29,15 +29,13 @@ int main() {
         std::cin >> type;
         if(type=="PRINT"){
             engine.printOrders();
-            continue;
         }
-        Order order = getUserInputOrder(type);
-        if (type == "BUY"){
-            engine.addBuyOrder(order);
+        else if (type == "BUY"){
+            engine.addBuyOrder(getUserInputOrder(type));
         }else if (type == "SELL"){
-            engine.addSellOrder(order);
+            engine.addSellOrder(getUserInputOrder(type));
         }else if (type =="MODIFY"){
-            engine.modifyOrder(order);
+            engine.modifyOrder(getUserInputOrder(type));
         }
         engine.matchOrders();
     }
